@@ -17,7 +17,8 @@ namespace AutoGC {
 	class GCThread
 	{
 	public:
-		GCThread(unsigned long sleepTime = 500) {
+		GCThread(unsigned long sleepTime = 500,unsigned long gcSleepTime = 1) {
+			this->sleepTime = gcSleepTime;
 			auto ThreadFunc = [this, sleepTime]()->void {
 				while (true) {
 					this->DoTask();
@@ -34,6 +35,7 @@ namespace AutoGC {
 			gc_thread = new thread(ThreadFunc);
 		}
 		~GCThread() {
+			sleepTime = 0;
 			cancel = true;
 			gc_thread->join();
 		}
@@ -49,7 +51,11 @@ namespace AutoGC {
 					if (j.second != nullptr) {
 						j.second->Delete();
 						i->erase(j.first);
-
+#if  defined(_WIN32) || defined(_WIN64)
+						Sleep(sleepTime);
+#else
+						_sleep(sleepTime);
+#endif
 					}
 				}
 				i->clear();
@@ -59,6 +65,7 @@ namespace AutoGC {
 		vector< std::unordered_map<AutoGC::Object*, AutoGC::Object*> > tasks;
 		thread* gc_thread;
 		bool cancel = false;
+		unsigned long sleepTime = 0;
 	};
 };
 
@@ -66,9 +73,9 @@ namespace {
 	AutoGC::GCThread * gc_thread = nullptr;
 };
 
-void AutoGC::GC_Init(unsigned long sleepTime)
+void AutoGC::GC_Init(unsigned long sleepTime,unsigned long gcSleepTime)
 {
-	gc_thread = new GCThread(sleepTime);
+	gc_thread = new GCThread(sleepTime,gcSleepTime);
 }
 
 void AutoGC::GC_Shut()

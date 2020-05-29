@@ -1,2 +1,4 @@
-﻿LINK : fatal error C1905: 前端和后端不兼容(必须以同一处理器为目标)。
-LINK : fatal error LNK1257: 代码生成失败
+﻿  正在生成代码
+  All 509 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  testGC.vcxproj -> E:\Repos\AutoGC\x64\Release\testGC.exe

@@ -1,2 +1,3 @@
-﻿AutoGC.obj : warning LNK4221: 此对象文件未定义任何之前未定义的公共符号，因此任何耗用此库的链接操作都不会使用此文件
+﻿  auto_gc.cpp
+AutoGC.obj : warning LNK4221: 此对象文件未定义任何之前未定义的公共符号，因此任何耗用此库的链接操作都不会使用此文件
   AutoGC.vcxproj -> E:\Repos\AutoGC\x64\Debug\AutoGC.lib

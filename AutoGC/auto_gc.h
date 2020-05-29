@@ -1,4 +1,5 @@
 #pragma once
+#include <exception>
 #include <unordered_map>
 #include <type_traits>
 //Declarations
@@ -19,8 +20,9 @@ namespace AutoGC {
 	using is_based_on=std::is_base_of<Base,Class>;
 	
 	//Must be called in the main function
-	void GC_Init(unsigned long sleepTime = 500);
+	void GC_Init(unsigned long sleepTime = 500,unsigned long gcSleepTime = 1);
 	void GC_Shut();
+	class NULLPointerException :public std::exception {};
 };
 
 
@@ -157,6 +159,8 @@ inline MemType & AutoGC::Heap::New()
 		AutoGC::is_based_on<MemType, AutoGC::Object>::value,
 		"Error:MemType Must be an AutoGC::Heap!\n");
 	MemType *obj = new MemType;
+	if (obj == nullptr)
+		throw NULLPointerException();
 	this->memObjects.insert(std::make_pair(obj, obj));
 	return *obj;
 }
