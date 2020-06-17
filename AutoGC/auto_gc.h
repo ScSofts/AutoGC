@@ -31,14 +31,13 @@ class AutoGC::Hanged {
 protected:
 	Hanged() = delete;
 	Hanged(MemType & MemObject);
-	~Hanged();
 	template<class AnyType>
 	Hanged operator=(AnyType) = delete;
 protected:
 	MemType &HangObject;
 	bool shoule_collect = true;
 public:
-	
+	~Hanged();
 	//If this return value is unnessary,call this method
 	void unReceive();
 	
