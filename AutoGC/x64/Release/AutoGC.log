@@ -1,2 +1,4 @@
-﻿  auto_gc.cpp
+﻿  pch.cpp
+  AutoGC.cpp
+  auto_gc.cpp
   AutoGC.vcxproj -> E:\Repos\AutoGC\x64\Release\AutoGC.lib

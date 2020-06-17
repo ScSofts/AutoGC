@@ -31,8 +31,12 @@ class AutoGC::Hanged {
 protected:
 	Hanged() = delete;
 	Hanged(MemType & MemObject);
+	~Hanged();
+	template<class AnyType>
+	Hanged operator=(AnyType) = delete;
 protected:
 	MemType &HangObject;
+	bool shoule_collect = true;
 public:
 	
 	//If this return value is unnessary,call this method
@@ -139,14 +143,24 @@ inline AutoGC::Hanged<MemType>::Hanged(MemType & MemObject) :
 }
 
 template<class MemType>
+inline AutoGC::Hanged<MemType>::~Hanged()
+{
+	if (shoule_collect) {
+		delete &HangObject;
+	}
+}
+
+template<class MemType>
 void AutoGC::Hanged<MemType>::unReceive()
 {
 	((Object*)&HangObject)->Delete();
+	shoule_collect = false;
 }
 
 template<class MemType>
 MemType & AutoGC::Hanged<MemType>::receive(AutoGC::Heap& heap)
 {
+	shoule_collect = false;
 	heap.memObjects.insert(std::make_pair(&this->HangObject, &this->HangObject));
 	//.insert(std::make_pair(&this->HangObject, &this->HangObject));
 	return this->HangObject;
